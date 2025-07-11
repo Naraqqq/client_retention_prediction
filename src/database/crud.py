@@ -14,6 +14,10 @@ def getCustomer(customerid : float, db : Session):
     return df
 
 def savePrediction(customerid : float, prediction : float, db : Session):
-    db.execute(text("INSERT INTO retention_proba (customerid, retentionproba) VALUES (:customerid, :prediction)"),
-               {'customerid': customerid, 'prediction': prediction})
+    db.execute(text("""
+           INSERT INTO retention_proba (customerid, retentionproba)
+           VALUES (:customerid, :prediction)
+           ON CONFLICT (customerid)
+           DO UPDATE SET retentionproba = EXCLUDED.retentionproba
+       """), {'customerid': customerid, 'prediction': prediction})
     db.commit()

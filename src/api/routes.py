@@ -1,6 +1,6 @@
 # src/api/routes.py
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from src.database.connection import get_db
 from src.ML.predictor import predict
@@ -12,6 +12,10 @@ router = APIRouter()
 @router.post("/predict-retention/")
 def predict_retention(customerid : float, db : Session = Depends(get_db)):
     df = getCustomer(customerid, db)
+
+    if df is None or df.empty:
+        raise HTTPException(status_code=404, detail="Customer not found or no data available")
+
     prediction = float(predict(df))
     savePrediction(customerid, prediction, db)
 

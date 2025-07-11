@@ -35,4 +35,5 @@ def preprocess_xgboost(data: pd.DataFrame) -> pd.DataFrame:
 def preprocess_catboost(data: pd.DataFrame) -> pd.DataFrame:
     data_drop = data.drop(columns = ['id', 'customerid', 'surname'])
     data_drop = data_drop.rename(columns=RENAME_COLUMNS)
+
     return data_drop

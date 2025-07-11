@@ -13,7 +13,6 @@ def load_model():
     return model
 
 def predict(data) -> float:
-    validate_data(data)
     model = load_model()
 
     if (model.__class__.__name__ == 'XGBClassifier'):
